@@ -51,5 +51,4 @@ func ExampleNewSumInt64() {
 
 	// Output:
 	// Value is 17.
-
 }
