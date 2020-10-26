@@ -7,9 +7,9 @@ import (
 )
 
 func ExampleNewConstantBool() {
-	t, err := mmath.NewConstantBool(true).CalculateBool()
+	b, err := mmath.NewConstantBool(true).CalculateBool()
 
-	fmt.Printf("%t", t)
+	fmt.Printf("%t", b)
 	if err != nil {
 		fmt.Printf("Error is: %v\n", err)
 	}
