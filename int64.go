@@ -60,17 +60,14 @@ func NewSumInt64(calculations ...CalculationInt64) CalculationInt64 {
 type sum []CalculationInt64
 
 func (s sum) CalculateInt64() (int64, error) {
-	var result int64
-	var errs errors
-	for i := range s {
-		v, err := s[i].CalculateInt64()
-		if err != nil {
-			errs = append(errs, err)
-		}
-		result += v
+	results, err := runCalculationsInt64(s...)
+	if err != nil {
+		return 0, err
 	}
-	if len(errs) > 0 {
-		return 0, errs
+
+	var result int64
+	for i := range results {
+		result += results[i]
 	}
 	return result, nil
 }
@@ -85,17 +82,33 @@ func NewProductInt64(calculations ...CalculationInt64) CalculationInt64 {
 type product []CalculationInt64
 
 func (p product) CalculateInt64() (int64, error) {
+	results, err := runCalculationsInt64(p...)
+	if err != nil {
+		return 0, err
+	}
+
 	var result int64 = 1
+	for i := range results {
+		result *= results[i]
+	}
+	return result, nil
+}
+
+func runCalculationsInt64(calculations ...CalculationInt64) ([]int64, error) {
 	var errs errors
-	for i := range p {
-		v, err := p[i].CalculateInt64()
+	results := make([]int64, len(calculations))
+
+	for i := range calculations {
+		result, err := calculations[i].CalculateInt64()
+		results[i] = result
 		if err != nil {
 			errs = append(errs, err)
 		}
-		result *= v
 	}
+
 	if len(errs) > 0 {
-		return 0, errs
+		return nil, errs
 	}
-	return result, nil
+
+	return results, nil
 }
