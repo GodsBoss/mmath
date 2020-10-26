@@ -31,8 +31,18 @@ func ExampleVariableInt64() {
 		fmt.Printf("Error is: %v\n", err)
 	}
 
+	v64.Set(667)
+
+	v, err = v64.CalculateInt64()
+
+	fmt.Printf("Value is %d.\n", v)
+	if err != nil {
+		fmt.Printf("Error is: %v\n", err)
+	}
+
 	// Output:
 	// Value is 666.
+	// Value is 667.
 }
 
 func ExampleNewSumInt64() {
