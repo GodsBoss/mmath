@@ -12,18 +12,7 @@ import (
 func TestSumInt64(t *testing.T) {
 	t.Parallel()
 
-	testcases := map[string]struct {
-		// calculation is the calculation executed by the test. It's result is
-		// compared against the expected values.
-		calculation mmath.CalculationInt64
-
-		// expectedValue is the value the calculation should return.
-		expectedValue int64
-
-		// expectedErrorFunc checks the error. This being nil is equivalent to
-		// checking wether the error should be nil.
-		expectedErrorFunc errorTest
-	}{
+	testcases := map[string]testcase{
 		"no_summands": {
 			calculation:   mmath.NewSumInt64(),
 			expectedValue: 0,
@@ -81,6 +70,19 @@ func TestSumInt64(t *testing.T) {
 			},
 		)
 	}
+}
+
+type testcase struct {
+	// calculation is the calculation executed by the test. It's result is
+	// compared against the expected values.
+	calculation mmath.CalculationInt64
+
+	// expectedValue is the value the calculation should return.
+	expectedValue int64
+
+	// expectedErrorFunc checks the error. This being nil is equivalent to
+	// checking wether the error should be nil.
+	expectedErrorFunc errorTest
 }
 
 type errCalc struct {
