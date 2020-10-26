@@ -29,7 +29,7 @@ func TestNot(t *testing.T) {
 
 	testcases := map[string]testcaseBool{
 		"error": {
-			calculation:       mmath.NewNot(mmath.FailingCalculationBool(fmt.Errorf("whoopsie"))),
+			calculation:       mmath.NewNot(mmath.NewFailingCalculation(fmt.Errorf("whoopsie"))),
 			expectedErrorFunc: errorContainsString("whoopsie"),
 		},
 	}
@@ -43,8 +43,8 @@ func TestInt64Comparison(t *testing.T) {
 	testcases := map[string]testcaseBool{
 		"errors": {
 			calculation: mmath.NewInt64Equals(
-				mmath.FailingCalculationInt64(fmt.Errorf("broken")),
-				mmath.FailingCalculationInt64(fmt.Errorf("meh")),
+				mmath.NewFailingCalculation(fmt.Errorf("broken")),
+				mmath.NewFailingCalculation(fmt.Errorf("meh")),
 			),
 			expectedErrorFunc: errorAnd(
 				errorContainsString("broken"),

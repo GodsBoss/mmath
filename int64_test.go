@@ -75,7 +75,7 @@ func TestConditionalInt64(t *testing.T) {
 	testcases := map[string]testcaseInt64{
 		"error": {
 			calculation: mmath.NewConditionalInt64(
-				mmath.FailingCalculationBool(fmt.Errorf("hello")),
+				mmath.NewFailingCalculation(fmt.Errorf("hello")),
 				mmath.NewConstantInt64(1),
 				mmath.NewConstantInt64(2),
 			),
@@ -136,5 +136,5 @@ type testcaseInt64 struct {
 }
 
 func newErrCalcInt64(err error) mmath.CalculationInt64 {
-	return mmath.FailingCalculationInt64(err)
+	return mmath.NewFailingCalculation(err)
 }

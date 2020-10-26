@@ -93,11 +93,3 @@ func NewInt64Equals(first, second CalculationInt64) CalculationBoolFunc {
 		return firstValue == secondValue, nil
 	}
 }
-
-// FailingCalculationBool creates a calculation which always fails. This is
-// useful for testing when adding custom calculations.
-func FailingCalculationBool(err error) CalculationBoolFunc {
-	return func() (bool, error) {
-		return false, err
-	}
-}

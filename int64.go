@@ -138,11 +138,3 @@ func (cond conditionalInt64) CalculateInt64() (int64, error) {
 	}
 	return cond.ifFalse.CalculateInt64()
 }
-
-// FailingCalculationInt64 creates a calculation which always fails. This is
-// useful for testing when adding custom calculations.
-func FailingCalculationInt64(err error) CalculationInt64Func {
-	return func() (int64, error) {
-		return 0, err
-	}
-}
