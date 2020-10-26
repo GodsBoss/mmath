@@ -69,6 +69,27 @@ func TestProductInt64(t *testing.T) {
 	runTestcasesInt64(t, testcases)
 }
 
+func TestConditionalInt64(t *testing.T) {
+	t.Parallel()
+
+	testcases := map[string]testcaseInt64{
+		"error": {
+			calculation: mmath.NewConditionalInt64(
+				mmath.CalculationBoolFunc(
+					func() (bool, error) {
+						return false, fmt.Errorf("hello")
+					},
+				),
+				mmath.NewConstantInt64(1),
+				mmath.NewConstantInt64(2),
+			),
+			expectedErrorFunc: errorContainsString("hello"),
+		},
+	}
+
+	runTestcasesInt64(t, testcases)
+}
+
 func runTestcasesInt64(t *testing.T, testcases map[string]testcaseInt64) {
 	for name := range testcases {
 		testcaseInt64 := testcases[name]

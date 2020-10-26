@@ -80,3 +80,34 @@ func ExampleNewProductInt64() {
 	// Output:
 	// Value is 90.
 }
+
+func ExampleNewConditionalInt64() {
+	boolVar := mmath.NewVariableBool()
+	decision := mmath.NewConditionalInt64(
+		boolVar,
+		mmath.NewConstantInt64(23),
+		mmath.NewConstantInt64(9001),
+	)
+
+	boolVar.Set(true)
+
+	v, err := decision.CalculateInt64()
+
+	fmt.Printf("Value is %d.\n", v)
+	if err != nil {
+		fmt.Printf("Error is: %v\n", err)
+	}
+
+	boolVar.Set(false)
+
+	v, err = decision.CalculateInt64()
+
+	fmt.Printf("Value is %d.\n", v)
+	if err != nil {
+		fmt.Printf("Error is: %v\n", err)
+	}
+
+	// Output:
+	// Value is 23.
+	// Value is 9001.
+}

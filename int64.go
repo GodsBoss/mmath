@@ -111,6 +111,34 @@ func runCalculationsInt64(calculations ...CalculationInt64) ([]int64, error) {
 	return results, nil
 }
 
+// NewConditionalInt64 returns a calculation which returns the result of ifTrue
+// or ifFalse, depending on wether boolCalc returns true or false. If boolCalc
+// returns an error, that error is returned instead.
+func NewConditionalInt64(boolCalc CalculationBool, ifTrue, ifFalse CalculationInt64) CalculationInt64 {
+	return conditionalInt64{
+		boolCalc: boolCalc,
+		ifTrue:   ifTrue,
+		ifFalse:  ifFalse,
+	}
+}
+
+type conditionalInt64 struct {
+	boolCalc CalculationBool
+	ifTrue   CalculationInt64
+	ifFalse  CalculationInt64
+}
+
+func (cond conditionalInt64) CalculateInt64() (int64, error) {
+	b, err := cond.boolCalc.CalculateBool()
+	if err != nil {
+		return 0, err
+	}
+	if b {
+		return cond.ifTrue.CalculateInt64()
+	}
+	return cond.ifFalse.CalculateInt64()
+}
+
 // FailingCalculationInt64 creates a calculation which always fails. This is
 // useful for testing when adding custom calculations.
 func FailingCalculationInt64(err error) CalculationInt64Func {
