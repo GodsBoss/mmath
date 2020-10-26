@@ -37,6 +37,10 @@ func TestSumInt64(t *testing.T) {
 		},
 	}
 
+	runTestcases(t, testcases)
+}
+
+func runTestcases(t *testing.T, testcases map[string]testcase) {
 	for name := range testcases {
 		testcase := testcases[name]
 
