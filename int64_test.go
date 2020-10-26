@@ -11,7 +11,7 @@ import (
 func TestSumInt64(t *testing.T) {
 	t.Parallel()
 
-	testcases := map[string]testcase{
+	testcases := map[string]testcaseInt64{
 		"no_summands": {
 			calculation:   mmath.NewSumInt64(),
 			expectedValue: 0,
@@ -26,8 +26,8 @@ func TestSumInt64(t *testing.T) {
 		},
 		"errors": {
 			calculation: mmath.NewSumInt64(
-				newErrCalc(fmt.Errorf("foobar")),
-				newErrCalc(fmt.Errorf("xyz")),
+				newErrCalcInt64(fmt.Errorf("foobar")),
+				newErrCalcInt64(fmt.Errorf("xyz")),
 			),
 			expectedErrorFunc: errorAnd(
 				errorContainsString("foobar"),
@@ -36,13 +36,13 @@ func TestSumInt64(t *testing.T) {
 		},
 	}
 
-	runTestcases(t, testcases)
+	runTestcasesInt64(t, testcases)
 }
 
 func TestProductInt64(t *testing.T) {
 	t.Parallel()
 
-	testcases := map[string]testcase{
+	testcases := map[string]testcaseInt64{
 		"no_factors": {
 			calculation:   mmath.NewProductInt64(),
 			expectedValue: 1,
@@ -57,8 +57,8 @@ func TestProductInt64(t *testing.T) {
 		},
 		"errors": {
 			calculation: mmath.NewProductInt64(
-				newErrCalc(fmt.Errorf("abc")),
-				newErrCalc(fmt.Errorf("123")),
+				newErrCalcInt64(fmt.Errorf("abc")),
+				newErrCalcInt64(fmt.Errorf("123")),
 			),
 			expectedErrorFunc: errorAnd(
 				errorContainsString("abc"),
@@ -67,35 +67,35 @@ func TestProductInt64(t *testing.T) {
 		},
 	}
 
-	runTestcases(t, testcases)
+	runTestcasesInt64(t, testcases)
 }
 
-func runTestcases(t *testing.T, testcases map[string]testcase) {
+func runTestcasesInt64(t *testing.T, testcases map[string]testcaseInt64) {
 	for name := range testcases {
-		testcase := testcases[name]
+		testcaseInt64 := testcases[name]
 
 		t.Run(
 			name,
 			func(t *testing.T) {
 				t.Parallel()
 
-				actualValue, actualErr := testcase.calculation.CalculateInt64()
+				actualValue, actualErr := testcaseInt64.calculation.CalculateInt64()
 
-				if actualValue != testcase.expectedValue {
+				if actualValue != testcaseInt64.expectedValue {
 					t.Errorf(
 						"expected calculation result value to be %d, but got %d",
-						testcase.expectedValue,
+						testcaseInt64.expectedValue,
 						actualValue,
 					)
 				}
 
-				if testcase.expectedErrorFunc == nil && actualErr != nil {
+				if testcaseInt64.expectedErrorFunc == nil && actualErr != nil {
 					t.Errorf("expected no error, but got %+v", actualErr)
 				}
 
-				if testcase.expectedErrorFunc != nil {
+				if testcaseInt64.expectedErrorFunc != nil {
 					if actualErr != nil {
-						testcase.expectedErrorFunc(t, actualErr)
+						testcaseInt64.expectedErrorFunc(t, actualErr)
 					}
 					if actualErr == nil {
 						t.Errorf("expected non-nil error")
@@ -106,7 +106,7 @@ func runTestcases(t *testing.T, testcases map[string]testcase) {
 	}
 }
 
-type testcase struct {
+type testcaseInt64 struct {
 	// calculation is the calculation executed by the test. It's result is
 	// compared against the expected values.
 	calculation mmath.CalculationInt64
@@ -119,7 +119,7 @@ type testcase struct {
 	expectedErrorFunc errorTest
 }
 
-func newErrCalc(err error) mmath.CalculationInt64 {
+func newErrCalcInt64(err error) mmath.CalculationInt64 {
 	return mmath.FailingCalculationInt64(err)
 }
 
