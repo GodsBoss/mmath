@@ -40,6 +40,37 @@ func TestSumInt64(t *testing.T) {
 	runTestcases(t, testcases)
 }
 
+func TestProductInt64(t *testing.T) {
+	t.Parallel()
+
+	testcases := map[string]testcase{
+		"no_factors": {
+			calculation:   mmath.NewProductInt64(),
+			expectedValue: 1,
+		},
+		"some_numbers": {
+			calculation: mmath.NewProductInt64(
+				mmath.NewConstantInt64(3),
+				mmath.NewConstantInt64(-2),
+				mmath.NewConstantInt64(-7),
+			),
+			expectedValue: 42,
+		},
+		"errors": {
+			calculation: mmath.NewProductInt64(
+				newErrCalc(fmt.Errorf("abc")),
+				newErrCalc(fmt.Errorf("123")),
+			),
+			expectedErrorFunc: errorAnd(
+				errorContainsString("abc"),
+				errorContainsString("123"),
+			),
+		},
+	}
+
+	runTestcases(t, testcases)
+}
+
 func runTestcases(t *testing.T, testcases map[string]testcase) {
 	for name := range testcases {
 		testcase := testcases[name]

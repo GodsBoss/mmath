@@ -74,3 +74,28 @@ func (s sum) CalculateInt64() (int64, error) {
 	}
 	return result, nil
 }
+
+// NewProductInt64 returns a calculation which returns the product of all
+// calculations passed to it. If one or more calculations fail, an error
+// wrapping all those individual errors is returned.
+func NewProductInt64(calculations ...CalculationInt64) CalculationInt64 {
+	return product(calculations)
+}
+
+type product []CalculationInt64
+
+func (p product) CalculateInt64() (int64, error) {
+	var result int64 = 1
+	var errs errors
+	for i := range p {
+		v, err := p[i].CalculateInt64()
+		if err != nil {
+			errs = append(errs, err)
+		}
+		result *= v
+	}
+	if len(errs) > 0 {
+		return 0, errs
+	}
+	return result, nil
+}

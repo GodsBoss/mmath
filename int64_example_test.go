@@ -52,3 +52,21 @@ func ExampleNewSumInt64() {
 	// Output:
 	// Value is 17.
 }
+
+func ExampleNewProductInt64() {
+	product := mmath.NewProductInt64(
+		mmath.NewConstantInt64(3),
+		mmath.NewConstantInt64(15),
+		mmath.NewConstantInt64(2),
+	)
+
+	v, err := product.CalculateInt64()
+
+	fmt.Printf("Value is %d.\n", v)
+	if err != nil {
+		fmt.Printf("Error is: %v\n", err)
+	}
+
+	// Output:
+	// Value is 90.
+}
