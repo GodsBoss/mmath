@@ -1,6 +1,7 @@
 package mmath_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/GodsBoss/mmath"
@@ -17,6 +18,19 @@ func TestConstantBool(t *testing.T) {
 		"false": {
 			calculation:   mmath.NewFalse(),
 			expectedValue: false,
+		},
+	}
+
+	runTestcasesBool(t, testcases)
+}
+
+func TestNot(t *testing.T) {
+	t.Parallel()
+
+	testcases := map[string]testcaseBool{
+		"error": {
+			calculation:       mmath.NewNot(mmath.FailingCalculationBool(fmt.Errorf("whoopsie"))),
+			expectedErrorFunc: errorContainsString("whoopsie"),
 		},
 	}
 

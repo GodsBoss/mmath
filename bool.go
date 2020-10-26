@@ -57,6 +57,18 @@ func (v *variableBool) Set(b bool) {
 	v.b = b
 }
 
+// NewNot returns the negated value of the wrapped calculation, except for when
+// that calculation returns an error. In that case, the error is returned.
+func NewNot(wrappedCalc CalculationBool) CalculationBoolFunc {
+	return func() (bool, error) {
+		b, err := wrappedCalc.CalculateBool()
+		if err != nil {
+			return false, err
+		}
+		return !b, nil
+	}
+}
+
 // FailingCalculationBool creates a calculation which always fails. This is
 // useful for testing when adding custom calculations.
 func FailingCalculationBool(err error) CalculationBoolFunc {
