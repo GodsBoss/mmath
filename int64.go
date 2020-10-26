@@ -14,9 +14,9 @@ func (f CalculationInt64Func) CalculateInt64() (int64, error) {
 	return f()
 }
 
-// ConstantInt64 returns a calculation which always returns the same value and
+// NewConstantInt64 returns a calculation which always returns the same value and
 // no error.
-func ConstantInt64(c int64) CalculationInt64 {
+func NewConstantInt64(c int64) CalculationInt64 {
 	return CalculationInt64Func(
 		func() (int64, error) {
 			return c, nil

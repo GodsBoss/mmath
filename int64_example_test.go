@@ -6,8 +6,8 @@ import (
 	"fmt"
 )
 
-func ExampleConstantInt64() {
-	i64 := mmath.ConstantInt64(100)
+func ExampleNewConstantInt64() {
+	i64 := mmath.NewConstantInt64(100)
 
 	v, err := i64.CalculateInt64()
 
