@@ -37,6 +37,25 @@ func TestNot(t *testing.T) {
 	runTestcasesBool(t, testcases)
 }
 
+func TestInt64Comparison(t *testing.T) {
+	t.Parallel()
+
+	testcases := map[string]testcaseBool{
+		"errors": {
+			calculation: mmath.NewInt64Equals(
+				mmath.FailingCalculationInt64(fmt.Errorf("broken")),
+				mmath.FailingCalculationInt64(fmt.Errorf("meh")),
+			),
+			expectedErrorFunc: errorAnd(
+				errorContainsString("broken"),
+				errorContainsString("meh"),
+			),
+		},
+	}
+
+	runTestcasesBool(t, testcases)
+}
+
 func runTestcasesBool(t *testing.T, testcases map[string]testcaseBool) {
 	for name := range testcases {
 		testcaseBool := testcases[name]

@@ -69,6 +69,31 @@ func NewNot(wrappedCalc CalculationBool) CalculationBoolFunc {
 	}
 }
 
+// NewInt64Equals returns wether the result of the first and second calculations
+// are equal. If one or both return an error, return an error combining those
+// errors instead.
+func NewInt64Equals(first, second CalculationInt64) CalculationBoolFunc {
+	return func() (bool, error) {
+		var errs errors
+
+		firstValue, err := first.CalculateInt64()
+		if err != nil {
+			errs = append(errs, err)
+		}
+
+		secondValue, err := second.CalculateInt64()
+		if err != nil {
+			errs = append(errs, err)
+		}
+
+		if len(errs) > 0 {
+			return false, errs
+		}
+
+		return firstValue == secondValue, nil
+	}
+}
+
 // FailingCalculationBool creates a calculation which always fails. This is
 // useful for testing when adding custom calculations.
 func FailingCalculationBool(err error) CalculationBoolFunc {

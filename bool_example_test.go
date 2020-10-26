@@ -54,3 +54,28 @@ func ExampleNewNot() {
 	// Output:
 	// false
 }
+
+func ExampleNewInt64Equals() {
+	v := mmath.NewVariableInt64()
+	b := mmath.NewInt64Equals(mmath.NewConstantInt64(75), v)
+
+	v.Set(50)
+
+	bValue, err := b.CalculateBool()
+	fmt.Printf("%t\n", bValue)
+	if err != nil {
+		fmt.Printf("Error is: %v\n", err)
+	}
+
+	v.Set(75)
+
+	bValue, err = b.CalculateBool()
+	fmt.Printf("%t\n", bValue)
+	if err != nil {
+		fmt.Printf("Error is: %v\n", err)
+	}
+
+	// Output:
+	// false
+	// true
+}
