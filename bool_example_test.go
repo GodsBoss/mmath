@@ -17,3 +17,28 @@ func ExampleNewConstantBool() {
 	// Output:
 	// true
 }
+
+func ExampleNewVariableBool() {
+	v := mmath.NewVariableBool()
+	v.Set(true)
+
+	b, err := v.CalculateBool()
+
+	fmt.Printf("%t\n", b)
+	if err != nil {
+		fmt.Printf("Error is: %v\n", err)
+	}
+
+	v.Set(false)
+
+	b, err = v.CalculateBool()
+
+	fmt.Printf("%t\n", b)
+	if err != nil {
+		fmt.Printf("Error is: %v\n", err)
+	}
+
+	// Output:
+	// true
+	// false
+}

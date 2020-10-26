@@ -31,3 +31,28 @@ func NewTrue() CalculationBool {
 func NewFalse() CalculationBool {
 	return NewConstantBool(false)
 }
+
+// NewVariableBool creates a variable. In calculations, it returns the value
+// it was set to. Calculating the result of a variable never fails.
+func NewVariableBool() VariableBool {
+	return &variableBool{}
+}
+
+// VariableBool represents a variable value, which can be set from the outside.
+type VariableBool interface {
+	CalculationBool
+
+	Set(b bool)
+}
+
+type variableBool struct {
+	b bool
+}
+
+func (v *variableBool) CalculateBool() (bool, error) {
+	return v.b, nil
+}
+
+func (v *variableBool) Set(b bool) {
+	v.b = b
+}
