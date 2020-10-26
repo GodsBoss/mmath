@@ -23,3 +23,13 @@ func NewConstantBool(b bool) CalculationBool {
 		},
 	)
 }
+
+// NewTrue returns a calculation which is always true.
+func NewTrue() CalculationBool {
+	return NewConstantBool(true)
+}
+
+// NewFalse returns a calculation which is always false.
+func NewFalse() CalculationBool {
+	return NewConstantBool(false)
+}
