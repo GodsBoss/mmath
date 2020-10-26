@@ -3,10 +3,9 @@ package mmath_test
 import (
 	"fmt"
 	"strings"
+	"testing"
 
 	"github.com/GodsBoss/mmath"
-
-	"testing"
 )
 
 func TestSumInt64(t *testing.T) {
