@@ -112,3 +112,13 @@ func runCalculationsInt64(calculations ...CalculationInt64) ([]int64, error) {
 
 	return results, nil
 }
+
+// FailingCalculationInt64 creates a calculation which always fails. This is
+// useful for testing when adding custom calculations.
+func FailingCalculationInt64(err error) CalculationInt64 {
+	return CalculationInt64Func(
+		func() (int64, error) {
+			return 0, err
+		},
+	)
+}

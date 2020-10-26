@@ -120,18 +120,8 @@ type testcase struct {
 	expectedErrorFunc errorTest
 }
 
-type errCalc struct {
-	err error
-}
-
-func (c errCalc) CalculateInt64() (int64, error) {
-	return 0, c.err
-}
-
-func newErrCalc(err error) *errCalc {
-	return &errCalc{
-		err: err,
-	}
+func newErrCalc(err error) mmath.CalculationInt64 {
+	return mmath.FailingCalculationInt64(err)
 }
 
 type errorTest func(t *testing.T, actualErr error)
