@@ -25,8 +25,8 @@ func TestSumInt64(t *testing.T) {
 		},
 		"errors": {
 			calculation: mmath.NewSumInt64(
-				newErrCalcInt64(fmt.Errorf("foobar")),
-				newErrCalcInt64(fmt.Errorf("xyz")),
+				mmath.NewFailingCalculation(fmt.Errorf("foobar")),
+				mmath.NewFailingCalculation(fmt.Errorf("xyz")),
 			),
 			expectedErrorFunc: errorAnd(
 				errorContainsString("foobar"),
@@ -56,8 +56,8 @@ func TestProductInt64(t *testing.T) {
 		},
 		"errors": {
 			calculation: mmath.NewProductInt64(
-				newErrCalcInt64(fmt.Errorf("abc")),
-				newErrCalcInt64(fmt.Errorf("123")),
+				mmath.NewFailingCalculation(fmt.Errorf("abc")),
+				mmath.NewFailingCalculation(fmt.Errorf("123")),
 			),
 			expectedErrorFunc: errorAnd(
 				errorContainsString("abc"),
@@ -133,8 +133,4 @@ type testcaseInt64 struct {
 	// expectedErrorFunc checks the error. This being nil is equivalent to
 	// checking wether the error should be nil.
 	expectedErrorFunc errorTest
-}
-
-func newErrCalcInt64(err error) mmath.CalculationInt64 {
-	return mmath.NewFailingCalculation(err)
 }
