@@ -16,12 +16,10 @@ func (f CalculationInt64Func) CalculateInt64() (int64, error) {
 
 // NewConstantInt64 returns a calculation which always returns the same value and
 // no error.
-func NewConstantInt64(c int64) CalculationInt64 {
-	return CalculationInt64Func(
-		func() (int64, error) {
-			return c, nil
-		},
-	)
+func NewConstantInt64(c int64) CalculationInt64Func {
+	return func() (int64, error) {
+		return c, nil
+	}
 }
 
 // NewVariableInt64 creates a variable. In calculations, it returns the value
@@ -115,10 +113,8 @@ func runCalculationsInt64(calculations ...CalculationInt64) ([]int64, error) {
 
 // FailingCalculationInt64 creates a calculation which always fails. This is
 // useful for testing when adding custom calculations.
-func FailingCalculationInt64(err error) CalculationInt64 {
-	return CalculationInt64Func(
-		func() (int64, error) {
-			return 0, err
-		},
-	)
+func FailingCalculationInt64(err error) CalculationInt64Func {
+	return func() (int64, error) {
+		return 0, err
+	}
 }

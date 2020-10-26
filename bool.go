@@ -16,12 +16,10 @@ func (f CalculationBoolFunc) CalculateBool() (bool, error) {
 
 // NewConstantBool returns a calculation which always returns the value passed
 // on creation.
-func NewConstantBool(b bool) CalculationBool {
-	return CalculationBoolFunc(
-		func() (bool, error) {
-			return b, nil
-		},
-	)
+func NewConstantBool(b bool) CalculationBoolFunc {
+	return func() (bool, error) {
+		return b, nil
+	}
 }
 
 // NewTrue returns a calculation which is always true.
