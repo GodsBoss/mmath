@@ -56,3 +56,11 @@ func (v *variableBool) CalculateBool() (bool, error) {
 func (v *variableBool) Set(b bool) {
 	v.b = b
 }
+
+// FailingCalculationBool creates a calculation which always fails. This is
+// useful for testing when adding custom calculations.
+func FailingCalculationBool(err error) CalculationBoolFunc {
+	return func() (bool, error) {
+		return false, err
+	}
+}

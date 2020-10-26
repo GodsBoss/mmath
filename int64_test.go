@@ -75,11 +75,7 @@ func TestConditionalInt64(t *testing.T) {
 	testcases := map[string]testcaseInt64{
 		"error": {
 			calculation: mmath.NewConditionalInt64(
-				mmath.CalculationBoolFunc(
-					func() (bool, error) {
-						return false, fmt.Errorf("hello")
-					},
-				),
+				mmath.FailingCalculationBool(fmt.Errorf("hello")),
 				mmath.NewConstantInt64(1),
 				mmath.NewConstantInt64(2),
 			),
