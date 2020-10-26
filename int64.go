@@ -23,3 +23,29 @@ func ConstantInt64(c int64) CalculationInt64 {
 		},
 	)
 }
+
+// NewVariableInt64 creates a variable. In calculations, it returns the value
+// it was set to. Calculating the result of a variable never fails.
+func NewVariableInt64() VariableInt64 {
+	return &variableInt64{}
+}
+
+// VariableInt64 represents a variable value, which can be set from the outside.
+type VariableInt64 interface {
+	CalculationInt64
+
+	// Set sets the variable. Afterwards, calling CalculateInt64() will return i.
+	Set(i int64)
+}
+
+type variableInt64 struct {
+	value int64
+}
+
+func (v *variableInt64) CalculateInt64() (int64, error) {
+	return v.value, nil
+}
+
+func (v *variableInt64) Set(i int64) {
+	v.value = i
+}

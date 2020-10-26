@@ -19,3 +19,18 @@ func ExampleConstantInt64() {
 	// Output:
 	// Value is 100.
 }
+
+func ExampleVariableInt64() {
+	v64 := mmath.NewVariableInt64()
+	v64.Set(666)
+
+	v, err := v64.CalculateInt64()
+
+	fmt.Printf("Value is %d.\n", v)
+	if err != nil {
+		fmt.Printf("Error is: %v\n", err)
+	}
+
+	// Output:
+	// Value is 666.
+}
