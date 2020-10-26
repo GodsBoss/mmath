@@ -49,3 +49,28 @@ func (v *variableInt64) CalculateInt64() (int64, error) {
 func (v *variableInt64) Set(i int64) {
 	v.value = i
 }
+
+// NewSumInt64 returns a calculation which returns the sum of all calculations
+// passed to it. If one or more calculations fail, an error wrapping all those
+// individual errors is returned.
+func NewSumInt64(calculations ...CalculationInt64) CalculationInt64 {
+	return sum(calculations)
+}
+
+type sum []CalculationInt64
+
+func (s sum) CalculateInt64() (int64, error) {
+	var result int64
+	var errs errors
+	for i := range s {
+		v, err := s[i].CalculateInt64()
+		if err != nil {
+			errs = append(errs, err)
+		}
+		result += v
+	}
+	if len(errs) > 0 {
+		return 0, errs
+	}
+	return result, nil
+}

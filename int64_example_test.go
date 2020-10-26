@@ -34,3 +34,22 @@ func ExampleVariableInt64() {
 	// Output:
 	// Value is 666.
 }
+
+func ExampleNewSumInt64() {
+	sum := mmath.NewSumInt64(
+		mmath.NewConstantInt64(25),
+		mmath.NewConstantInt64(-50),
+		mmath.NewConstantInt64(42),
+	)
+
+	v, err := sum.CalculateInt64()
+
+	fmt.Printf("Value is %d.\n", v)
+	if err != nil {
+		fmt.Printf("Error is: %v\n", err)
+	}
+
+	// Output:
+	// Value is 17.
+
+}
