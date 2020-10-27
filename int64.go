@@ -174,6 +174,8 @@ func NewCreateBinaryInt64(
 	}
 }
 
+// NewSignumInt64 returns a calculation which returns the signum of another
+// calculation. If that other calculation fails, that error is returned instead.
 func NewSignumInt64(calculation CalculationInt64) CalculationInt64Func {
 	return func() (int64, error) {
 		v, err := calculation.CalculateInt64()
