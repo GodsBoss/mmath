@@ -173,3 +173,20 @@ func NewCreateBinaryInt64(
 		}
 	}
 }
+
+func NewSignumInt64(calculation CalculationInt64) CalculationInt64Func {
+	return func() (int64, error) {
+		v, err := calculation.CalculateInt64()
+		if err != nil {
+			return 0, err
+		}
+
+		if v > 0 {
+			return 1, nil
+		}
+		if v < 0 {
+			return -1, nil
+		}
+		return 0, nil
+	}
+}

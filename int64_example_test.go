@@ -134,3 +134,20 @@ func ExampleNewCreateBinaryInt64() {
 	// Output:
 	// Value is 88.
 }
+
+func ExampleNewSignumInt64() {
+	var i int64
+	for i = -1; i <= 1; i++ {
+		v, err := mmath.NewSignumInt64(mmath.NewConstantInt64(i)).CalculateInt64()
+
+		fmt.Printf("Value is %d.\n", v)
+		if err != nil {
+			fmt.Printf("Error is: %v\n", err)
+		}
+	}
+
+	// Output:
+	// Value is -1.
+	// Value is 0.
+	// Value is 1.
+}

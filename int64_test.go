@@ -109,6 +109,21 @@ func TestBinaryInt64(t *testing.T) {
 	runTestcasesInt64(t, testcases)
 }
 
+func TestSignumInt64(t *testing.T) {
+	t.Parallel()
+
+	testcases := map[string]testcaseInt64{
+		"error": {
+			calculation: mmath.NewSignumInt64(
+				mmath.NewFailingCalculation(fmt.Errorf("xyz")),
+			),
+			expectedErrorFunc: errorContainsString("xyz"),
+		},
+	}
+
+	runTestcasesInt64(t, testcases)
+}
+
 func runTestcasesInt64(t *testing.T, testcases map[string]testcaseInt64) {
 	for name := range testcases {
 		testcaseInt64 := testcases[name]
