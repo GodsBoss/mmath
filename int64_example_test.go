@@ -151,3 +151,25 @@ func ExampleNewSignumInt64() {
 	// Value is 0.
 	// Value is 1.
 }
+
+func ExampleNewReduceLeft() {
+	v, err := mmath.NewReduceLeft(
+		func(current, next int64) (int64, error) {
+			return current*10 + next, nil
+		},
+		mmath.NewConstantInt64(2),
+		[]mmath.CalculationInt64{
+			mmath.NewConstantInt64(3),
+			mmath.NewConstantInt64(7),
+			mmath.NewConstantInt64(5),
+		},
+	).CalculateInt64()
+
+	fmt.Printf("Value is %d.\n", v)
+	if err != nil {
+		fmt.Printf("Error is: %v\n", err)
+	}
+
+	// Output:
+	// Value is 2375.
+}

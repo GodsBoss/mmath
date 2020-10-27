@@ -58,10 +58,10 @@ func NewSumInt64(calculations ...CalculationInt64) CalculationInt64 {
 type sum []CalculationInt64
 
 func (s sum) CalculateInt64() (int64, error) {
-	add := func(leftOp, rightOp int64) int64 {
-		return leftOp + rightOp
+	add := func(leftOp, rightOp int64) (int64, error) {
+		return leftOp + rightOp, nil
 	}
-	return reduceInt64(add, 0, s)
+	return reduceLeftInt64(add, 0, s)
 }
 
 // NewProductInt64 returns a calculation which returns the product of all
@@ -74,14 +74,14 @@ func NewProductInt64(calculations ...CalculationInt64) CalculationInt64 {
 type product []CalculationInt64
 
 func (p product) CalculateInt64() (int64, error) {
-	multiply := func(leftOp, rightOp int64) int64 {
-		return leftOp * rightOp
+	multiply := func(leftOp, rightOp int64) (int64, error) {
+		return leftOp * rightOp, nil
 	}
-	return reduceInt64(multiply, 1, p)
+	return reduceLeftInt64(multiply, 1, p)
 }
 
-func reduceInt64(
-	reduce func(leftOp, rightOp int64) int64,
+func reduceLeftInt64(
+	reduce func(leftOp, rightOp int64) (int64, error),
 	initialValue int64,
 	calculations []CalculationInt64,
 ) (int64, error) {
@@ -93,7 +93,11 @@ func reduceInt64(
 
 	result := initialValue
 	for i := range values {
-		result = reduce(result, values[i])
+		var err error
+		result, err = reduce(result, values[i])
+		if err != nil {
+			return 0, err
+		}
 	}
 
 	return result, nil
@@ -191,4 +195,38 @@ func NewSignumInt64(calculation CalculationInt64) CalculationInt64Func {
 		}
 		return 0, nil
 	}
+}
+
+// NewReduceLeft takes a function which reduces two values to one (or an error),
+// an initial value and a number of calculations. The beginning value is the
+// initial value, then for every calculated value is combined via reduce to
+// create the final value which is returned.
+//
+// If creating the initial value fails, that error is returned. If one or more
+// of the calculations fail, their combined errors are returned (as an error).
+// Should reduce fail at any point, that error is returned.
+func NewReduceLeft(
+	reduce func(current int64, next int64) (int64, error),
+	initialValue CalculationInt64,
+	calculations []CalculationInt64,
+) CalculationInt64 {
+	return reduceLeft{
+		reduce:       reduce,
+		initialValue: initialValue,
+		calculations: calculations,
+	}
+}
+
+type reduceLeft struct {
+	reduce       func(current int64, next int64) (int64, error)
+	initialValue CalculationInt64
+	calculations []CalculationInt64
+}
+
+func (rl reduceLeft) CalculateInt64() (int64, error) {
+	initialValue, err := rl.initialValue.CalculateInt64()
+	if err != nil {
+		return 0, err
+	}
+	return reduceLeftInt64(rl.reduce, initialValue, rl.calculations)
 }

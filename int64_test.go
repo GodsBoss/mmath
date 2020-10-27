@@ -83,6 +83,47 @@ func TestInt64(t *testing.T) {
 			),
 			expectedErrorFunc: errorContainsString("xyz"),
 		},
+		"reduceLeft/initialValueError": {
+			calculation: mmath.NewReduceLeft(
+				func(_, _ int64) (int64, error) {
+					return 0, nil
+				},
+				mmath.NewFailingCalculation(fmt.Errorf("initial calculation failed")),
+				[]mmath.CalculationInt64{},
+			),
+			expectedErrorFunc: errorContainsString("initial calculation failed"),
+		},
+		"reduceLeft/calculationsError": {
+			calculation: mmath.NewReduceLeft(
+				func(_, _ int64) (int64, error) {
+					return 0, nil
+				},
+				mmath.NewConstantInt64(0),
+				[]mmath.CalculationInt64{
+					mmath.NewFailingCalculation(fmt.Errorf("nobody")),
+					mmath.NewFailingCalculation(fmt.Errorf("knows")),
+				},
+			),
+			expectedErrorFunc: errorAnd(
+				errorContainsString("nobody"),
+				errorContainsString("knows"),
+			),
+		},
+		"reduceLeft/reduceError": {
+			calculation: mmath.NewReduceLeft(
+				func(_, _ int64) (int64, error) {
+					return 0, fmt.Errorf("reduce failure")
+				},
+				mmath.NewConstantInt64(0),
+				[]mmath.CalculationInt64{
+					mmath.NewConstantInt64(0),
+					mmath.NewConstantInt64(0),
+				},
+			),
+			expectedErrorFunc: errorAnd(
+				errorContainsString("reduce failure"),
+			),
+		},
 	}
 
 	for name := range testcases {
