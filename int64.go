@@ -58,16 +58,10 @@ func NewSumInt64(calculations ...CalculationInt64) CalculationInt64 {
 type sum []CalculationInt64
 
 func (s sum) CalculateInt64() (int64, error) {
-	results, err := runCalculationsInt64(s...)
-	if err != nil {
-		return 0, err
+	add := func(leftOp, rightOp int64) int64 {
+		return leftOp + rightOp
 	}
-
-	var result int64
-	for i := range results {
-		result += results[i]
-	}
-	return result, nil
+	return reduceInt64(add, 0, s)
 }
 
 // NewProductInt64 returns a calculation which returns the product of all
@@ -80,15 +74,28 @@ func NewProductInt64(calculations ...CalculationInt64) CalculationInt64 {
 type product []CalculationInt64
 
 func (p product) CalculateInt64() (int64, error) {
-	results, err := runCalculationsInt64(p...)
+	multiply := func(leftOp, rightOp int64) int64 {
+		return leftOp * rightOp
+	}
+	return reduceInt64(multiply, 1, p)
+}
+
+func reduceInt64(
+	reduce func(leftOp, rightOp int64) int64,
+	initialValue int64,
+	calculations []CalculationInt64,
+) (int64, error) {
+
+	values, err := runCalculationsInt64(calculations...)
 	if err != nil {
 		return 0, err
 	}
 
-	var result int64 = 1
-	for i := range results {
-		result *= results[i]
+	result := initialValue
+	for i := range values {
+		result = reduce(result, values[i])
 	}
+
 	return result, nil
 }
 
