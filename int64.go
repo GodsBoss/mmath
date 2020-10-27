@@ -52,16 +52,13 @@ func (v *variableInt64) Set(i int64) {
 // passed to it. If one or more calculations fail, an error wrapping all those
 // individual errors is returned.
 func NewSumInt64(calculations ...CalculationInt64) CalculationInt64 {
-	return sum(calculations)
-}
-
-type sum []CalculationInt64
-
-func (s sum) CalculateInt64() (int64, error) {
-	add := func(leftOp, rightOp int64) (int64, error) {
-		return leftOp + rightOp, nil
-	}
-	return reduceLeftInt64(add, 0, s)
+	return NewReduceLeft(
+		func(left, right int64) (int64, error) {
+			return left + right, nil
+		},
+		NewConstantInt64(0),
+		calculations,
+	)
 }
 
 // NewProductInt64 returns a calculation which returns the product of all
