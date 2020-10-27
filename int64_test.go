@@ -7,15 +7,15 @@ import (
 	"github.com/GodsBoss/mmath"
 )
 
-func TestSumInt64(t *testing.T) {
+func TestInt64(t *testing.T) {
 	t.Parallel()
 
 	testcases := map[string]testcaseInt64{
-		"no_summands": {
+		"sum/no_summands": {
 			calculation:   mmath.NewSumInt64(),
 			expectedValue: 0,
 		},
-		"some_numbers": {
+		"sum/some_numbers": {
 			calculation: mmath.NewSumInt64(
 				mmath.NewConstantInt64(10),
 				mmath.NewConstantInt64(-5),
@@ -23,7 +23,7 @@ func TestSumInt64(t *testing.T) {
 			),
 			expectedValue: 23,
 		},
-		"errors": {
+		"sum/errors": {
 			calculation: mmath.NewSumInt64(
 				mmath.NewFailingCalculation(fmt.Errorf("foobar")),
 				mmath.NewFailingCalculation(fmt.Errorf("xyz")),
@@ -33,20 +33,11 @@ func TestSumInt64(t *testing.T) {
 				errorContainsString("xyz"),
 			),
 		},
-	}
-
-	runTestcasesInt64(t, testcases)
-}
-
-func TestProductInt64(t *testing.T) {
-	t.Parallel()
-
-	testcases := map[string]testcaseInt64{
-		"no_factors": {
+		"product/no_factors": {
 			calculation:   mmath.NewProductInt64(),
 			expectedValue: 1,
 		},
-		"some_numbers": {
+		"product/some_numbers": {
 			calculation: mmath.NewProductInt64(
 				mmath.NewConstantInt64(3),
 				mmath.NewConstantInt64(-2),
@@ -54,7 +45,7 @@ func TestProductInt64(t *testing.T) {
 			),
 			expectedValue: 42,
 		},
-		"errors": {
+		"product/errors": {
 			calculation: mmath.NewProductInt64(
 				mmath.NewFailingCalculation(fmt.Errorf("abc")),
 				mmath.NewFailingCalculation(fmt.Errorf("123")),
@@ -64,16 +55,7 @@ func TestProductInt64(t *testing.T) {
 				errorContainsString("123"),
 			),
 		},
-	}
-
-	runTestcasesInt64(t, testcases)
-}
-
-func TestConditionalInt64(t *testing.T) {
-	t.Parallel()
-
-	testcases := map[string]testcaseInt64{
-		"error": {
+		"conditional/error": {
 			calculation: mmath.NewConditionalInt64(
 				mmath.NewFailingCalculation(fmt.Errorf("hello")),
 				mmath.NewConstantInt64(1),
@@ -81,16 +63,7 @@ func TestConditionalInt64(t *testing.T) {
 			),
 			expectedErrorFunc: errorContainsString("hello"),
 		},
-	}
-
-	runTestcasesInt64(t, testcases)
-}
-
-func TestBinaryInt64(t *testing.T) {
-	t.Parallel()
-
-	testcases := map[string]testcaseInt64{
-		"error": {
+		"binary/error": {
 			calculation: mmath.NewCreateBinaryInt64(
 				func(i, j int64) int64 {
 					return i + j
@@ -104,16 +77,7 @@ func TestBinaryInt64(t *testing.T) {
 				errorContainsString("world"),
 			),
 		},
-	}
-
-	runTestcasesInt64(t, testcases)
-}
-
-func TestSignumInt64(t *testing.T) {
-	t.Parallel()
-
-	testcases := map[string]testcaseInt64{
-		"error": {
+		"signum/error": {
 			calculation: mmath.NewSignumInt64(
 				mmath.NewFailingCalculation(fmt.Errorf("xyz")),
 			),
@@ -121,10 +85,6 @@ func TestSignumInt64(t *testing.T) {
 		},
 	}
 
-	runTestcasesInt64(t, testcases)
-}
-
-func runTestcasesInt64(t *testing.T, testcases map[string]testcaseInt64) {
 	for name := range testcases {
 		testcaseInt64 := testcases[name]
 
