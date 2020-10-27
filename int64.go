@@ -65,16 +65,13 @@ func NewSumInt64(calculations ...CalculationInt64) CalculationInt64 {
 // calculations passed to it. If one or more calculations fail, an error
 // wrapping all those individual errors is returned.
 func NewProductInt64(calculations ...CalculationInt64) CalculationInt64 {
-	return product(calculations)
-}
-
-type product []CalculationInt64
-
-func (p product) CalculateInt64() (int64, error) {
-	multiply := func(leftOp, rightOp int64) (int64, error) {
-		return leftOp * rightOp, nil
-	}
-	return reduceLeftInt64(multiply, 1, p)
+	return NewReduceLeft(
+		func(left, right int64) (int64, error) {
+			return left * right, nil
+		},
+		NewConstantInt64(1),
+		calculations,
+	)
 }
 
 func reduceLeftInt64(
