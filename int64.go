@@ -74,29 +74,6 @@ func NewProductInt64(calculations ...CalculationInt64) CalculationInt64 {
 	)
 }
 
-func reduceLeftInt64(
-	reduce func(leftOp, rightOp int64) (int64, error),
-	initialValue int64,
-	calculations []CalculationInt64,
-) (int64, error) {
-
-	values, err := runCalculationsInt64(calculations...)
-	if err != nil {
-		return 0, err
-	}
-
-	result := initialValue
-	for i := range values {
-		var err error
-		result, err = reduce(result, values[i])
-		if err != nil {
-			return 0, err
-		}
-	}
-
-	return result, nil
-}
-
 func runCalculationsInt64(calculations ...CalculationInt64) ([]int64, error) {
 	var errs errors
 	results := make([]int64, len(calculations))
@@ -222,5 +199,20 @@ func (rl reduceLeft) CalculateInt64() (int64, error) {
 	if err != nil {
 		return 0, err
 	}
-	return reduceLeftInt64(rl.reduce, initialValue, rl.calculations)
+
+	values, err := runCalculationsInt64(rl.calculations...)
+	if err != nil {
+		return 0, err
+	}
+
+	result := initialValue
+	for i := range values {
+		var err error
+		result, err = rl.reduce(result, values[i])
+		if err != nil {
+			return 0, err
+		}
+	}
+
+	return result, nil
 }
