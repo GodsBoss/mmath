@@ -111,3 +111,26 @@ func ExampleNewConditionalInt64() {
 	// Value is 23.
 	// Value is 9001.
 }
+
+func ExampleNewCreateBinaryInt64() {
+	add := func(left, right int64) int64 {
+		return left + right
+	}
+
+	createAddCalc := mmath.NewCreateBinaryInt64(add)
+
+	addCalc := createAddCalc(
+		mmath.NewConstantInt64(17),
+		mmath.NewConstantInt64(71),
+	)
+
+	v, err := addCalc.CalculateInt64()
+
+	fmt.Printf("Value is %d.\n", v)
+	if err != nil {
+		fmt.Printf("Error is: %v\n", err)
+	}
+
+	// Output:
+	// Value is 88.
+}

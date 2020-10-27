@@ -86,6 +86,29 @@ func TestConditionalInt64(t *testing.T) {
 	runTestcasesInt64(t, testcases)
 }
 
+func TestBinaryInt64(t *testing.T) {
+	t.Parallel()
+
+	testcases := map[string]testcaseInt64{
+		"error": {
+			calculation: mmath.NewCreateBinaryInt64(
+				func(i, j int64) int64 {
+					return i + j
+				},
+			)(
+				mmath.NewFailingCalculation(fmt.Errorf("hello")),
+				mmath.NewFailingCalculation(fmt.Errorf("world")),
+			),
+			expectedErrorFunc: errorAnd(
+				errorContainsString("hello"),
+				errorContainsString("world"),
+			),
+		},
+	}
+
+	runTestcasesInt64(t, testcases)
+}
+
 func runTestcasesInt64(t *testing.T, testcases map[string]testcaseInt64) {
 	for name := range testcases {
 		testcaseInt64 := testcases[name]

@@ -145,3 +145,31 @@ func (cond conditionalInt64) CalculateInt64() (int64, error) {
 	}
 	return cond.ifFalse.CalculateInt64()
 }
+
+// NewCreateBinaryInt64 wraps a simple binary arithmetic function (int64, int64) -> int64 and
+// returns a calculation constructor representing the same calculation.
+func NewCreateBinaryInt64(
+	f func(left, right int64) int64,
+) func(left, right CalculationInt64) CalculationInt64Func {
+	return func(left, right CalculationInt64) CalculationInt64Func {
+		return func() (int64, error) {
+			var errs errors
+
+			leftValue, err := left.CalculateInt64()
+			if err != nil {
+				errs = append(errs, err)
+			}
+
+			rightValue, err := right.CalculateInt64()
+			if err != nil {
+				errs = append(errs, err)
+			}
+
+			if len(errs) > 0 {
+				return 0, errs
+			}
+
+			return f(leftValue, rightValue), nil
+		}
+	}
+}
